@@ -4,9 +4,9 @@ using SimpleInventoryManagementSystem.ProductManagement.Entity;
 using SimpleInventoryManagementSystem.ProductManagement.Repository;
 using SimpleInventoryManagementSystem.Utilities;
 
- //UseSQLDB();
+ UseSQLDB();
 
-UseMongoDB();
+//UseMongoDB();
 
 
 

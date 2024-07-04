@@ -15,16 +15,18 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
         }
         public void AddProduct(Product product)
         {
-            string query = "INSERT INTO Products (Name, Price, Quantity) OUTPUT INSERTED.Id VALUES (@Name, @Price, @Quantity)";
+
+            string query = "INSERT INTO Products (Id, Name, Price, Quantity) VALUES (@Id, @Name, @Price, @Quantity)";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", product.Id);
                 command.Parameters.AddWithValue("@Name", product.Name);
                 command.Parameters.AddWithValue("@Price", product.Price);
                 command.Parameters.AddWithValue("@Quantity", product.Quantity);
                 connection.Open();
-                product.Id = (int)command.ExecuteScalar();
+                command.ExecuteNonQuery();
                 connection.Close();
             }
         }
@@ -43,7 +45,7 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
                     {
                         while (reader.Read())
                         {
-                            int id = reader.GetInt32(0);
+                            string id = reader.GetString(0);
                             string name = reader.GetString(1);
                             double price = reader.GetDouble(2);
                             int quantity = reader.GetInt32(3);
@@ -58,7 +60,7 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
             return products;
         }
 
-        public Product? GetProductById(int productId)
+        public Product? GetProductById(string productId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -72,7 +74,7 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
                     {
                         if (reader.Read())
                         {
-                            int id = reader.GetInt32(0);
+                            string id = reader.GetString(0);
                             string name = reader.GetString(1);
                             double price = reader.GetDouble(2);
                             int quantity = reader.GetInt32(3);
@@ -86,7 +88,7 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
             return null;
         }
 
-        public void RemoveProduct(int productId)
+        public void RemoveProduct(string productId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -135,7 +137,7 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
                     {
                         if (reader.Read())
                         {
-                            int id = reader.GetInt32(0);
+                            String id = reader.GetString(0);
                             string name = reader.GetString(1);
                             double price = reader.GetDouble(2);
                             int quantity = reader.GetInt32(3);
@@ -149,26 +151,6 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
             return null;
         }
 
-        public int? FindProductIndex(string productName)
-        {
-            int index = -1;
-            string query = "SELECT Id FROM Products WHERE Name = @Name";
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Name", productName);
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    index = (int)reader["Id"];
-                }
-                connection.Close();
-            }
-            return index;
-        }
 
     }
 }

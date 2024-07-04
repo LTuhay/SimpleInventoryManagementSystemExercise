@@ -22,11 +22,6 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
 
         public void AddProduct(Product product)
         {
-            var maxId = _productsCollection.AsQueryable()
-                .OrderByDescending(p => p.Id)
-                .FirstOrDefault()?.Id ?? 0;
-
-            product.Id = maxId + 1;
             _productsCollection.InsertOne(product);
         }
 
@@ -36,7 +31,7 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
             _productsCollection.ReplaceOne(filter, product);
         }
 
-        public void RemoveProduct(int productId)
+        public void RemoveProduct(string productId)
         {
             var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
             _productsCollection.DeleteOne(filter);
@@ -48,22 +43,11 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Repository
             return _productsCollection.Find(filter).FirstOrDefault();
         }
 
-        public int FindProductIndex(string productName)
-        {
-            var product = FindProductByName(productName);
-            return product?.Id ?? -1;
-        }
-
-        public Product? GetProductById(int productId)
+        public Product? GetProductById(string productId)
         {
             var filter = Builders<Product>.Filter.Eq(p => p.Id, productId);
             return _productsCollection.Find(filter).FirstOrDefault();
         }
 
-        int? IProductRepository.FindProductIndex(string productName)
-        {
-            var product = FindProductByName(productName);
-            return product != null ? (int)product.Id : -1;
-        }
     }
 }

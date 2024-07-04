@@ -6,26 +6,27 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Entity
     public class Product
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId MongoId { get; set; }
-
-        [BsonElement("Id")]
-        public int Id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public string Id { get; set; }
         public string Name { get; set; }
 
         public double Price { get; set; }
 
         public int Quantity { get; set; }
 
-        public Product(int id, string name, double price)
+        public Product(string name, double price)
+        {
+
+            Name = name;
+            Price = price;
+        }
+
+        public Product(string id, string name, double price)
         {
             Id = id;
             Name = name;
             Price = price;
         }
-
-        public Product(string name, double price) : this(0, name, price) { }
-
 
         public virtual void IncreaseQuantity(int quantityToIncrease)
         {

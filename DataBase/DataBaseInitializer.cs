@@ -49,7 +49,7 @@ namespace SimpleInventoryManagementSystem.DataBase
                 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Products' and xtype='U')
                 BEGIN
                     CREATE TABLE Products (
-                        Id INT IDENTITY(1,1) PRIMARY KEY,
+                        Id NVARCHAR(36) PRIMARY KEY,
                         Name NVARCHAR(100) NOT NULL,
                         Price FLOAT NOT NULL,
                         Quantity INT NOT NULL

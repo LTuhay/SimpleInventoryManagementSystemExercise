@@ -48,11 +48,5 @@ namespace SimpleInventoryManagementSystem.ProductManagement.Entity
 
         }
 
-        public int? FindProductIndex(string productName)
-        {
-            return _productRepository.FindProductIndex(productName);
-
-        }
-
     }
 }

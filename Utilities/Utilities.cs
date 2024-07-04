@@ -126,7 +126,6 @@ namespace SimpleInventoryManagementSystem.Utilities
                 string decreaseQuantityStr;
                 int decreaseQuantity;
 
-                int? index = _inventory.FindProductIndex(productName);
                 do
                 {
                     Console.WriteLine($"* Updating {productToUpdate.Name} *");
@@ -226,7 +225,10 @@ namespace SimpleInventoryManagementSystem.Utilities
                 quantityStr = Console.ReadLine();
             } while (!int.TryParse(quantityStr, out quantity));
 
-            Product newProduct = new Product(0, name, price);
+
+            Product newProduct = new Product(name, price);
+            String newProductId = Guid.NewGuid().ToString();
+            newProduct.Id = newProductId;
             newProduct.IncreaseQuantity(quantity);
             _inventory.AddProduct(newProduct);
         }
